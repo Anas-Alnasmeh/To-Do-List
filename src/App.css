@@ -1,38 +1,210 @@
-.App {
+/* Css Variables */
+:root {
+  --radius: 10px;
+  --primary: #eee;
+  --transition: .3s;
+  --transform: translateY(-2px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*::selection {
+  background-color: rgb(93, 19, 130);
+  color: var(--primary);
+}
+
+.animat {
+  margin-left: -150px;
+  opacity: 0;
+  animation: big-title 900ms forwards ease-in-out;
+}
+
+.container {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login-box {
+  color: var(--primary);
+  margin-top: 15px;
+  border-radius: var(--radius);
+  height: 400px;
+  width: 400px;
+  background-image: linear-gradient(150deg, rgb(93, 19, 130) 20%, rgb(84, 18, 142) 70%, rgb(59, 16, 159));
+  padding: 50px 30px;
+  box-shadow: 2px 2px 6px 1px gray;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.login-box .select-botton {
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
+}
+
+.login-box .select-botton button {
+  margin-bottom: 20px;
+  color: #a5d9ff;
+  cursor: pointer;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.153);
+  border-radius: 20px;
+  height: 60px;
+  font-size: 18px;
+}
+
+.login-box .select-botton button:hover {
+  background-image: linear-gradient(-150deg, rgb(70, 14, 98), rgb(65, 14, 109), rgb(42, 12, 112));
+  color: var(--primary);
+}
+
+/* Tasks Page */
+
+.tasks-box {
+  background-color: var(--primary);
+  border-radius: var(--radius);
+  min-height: 300px;
+  width: 500px;
+  padding: 20px 30px 40px;
+}
+
+.tasks-box h1 {
+  text-align: center;
+}
+
+.tasks-box .add-task {
+  display: flex;
+  height: 40px;
+  justify-content: space-between;
+}
+
+.tasks-box .add-task input,
+.tasks-box .add-task button {
+  border: none;
+  outline: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+}
+
+.tasks-box .add-task input {
+  width: calc(70% - 5px);
+  padding-right: 10px;
+}
+
+.tasks-box .add-task input:focus {
+  border: 2px solid rgba(0, 0, 121, 0.813);
+}
+
+.tasks-box .add-task button {
+  width: calc(30% - 5px);
+  background-color: rgba(130, 0, 0, 0.781);
+  color: var(--primary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.tasks-box .add-task button:hover {
+  background-color: rgba(174, 3, 3, 0.858);
+}
+
+.tasks-box ul {
+  padding: 0;
+}
+
+.tasks-box ul li {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  width: 100%;
+  min-height: 50px;
+  background-color: rgba(0, 0, 121, 0.813);
+  border-radius: var(--radius);
+  color: var(--primary);
+  word-break: break-word;
+}
+
+.tasks-box ul li .icons {
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.tasks-box ul li .icon {
+  width: 35px;
+  height: 35px;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
+.tasks-box ul li .icon:hover {
+  background-color: rgba(255, 255, 255, 0.781);
+}
+
+.tasks-box label {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.tasks-box .already-exist {
+  color: #cf0404e3;
+  font-size: 13px;
+  width: calc(70% - 5px);
+  text-align: center;
+  margin-top: 8px;
+  transition: var(--transition);
+}
+
+/* Categories */
+
+.categories {
+  display: flex;
+  justify-content: center;
+}
+
+.categories button {
+  width: 90px;
+  height: 35px;
+  margin: 8px;
+  padding: 8px 10px;
+  font-size: 19px;
+  cursor: pointer;
+  transition: var(--transition);
+  border-radius: var(--radius);
+  border: 2px solid rgb(52, 14, 98);
+}
+
+.categories button.active,
+.categories button:hover {
+  background-color: rgb(52, 14, 98);
+  color: var(--primary);
+}
+
+.categories button:hover {
+  transform: var(--transform);
+  box-shadow: 0 0 6px 2px rgb(128 128 128 / 39%);
+}
+
+/* .success {
+  color: green;
+} */
+
+@keyframes big-title {
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    margin-left: 0;
   }
 }
