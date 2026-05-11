@@ -3,21 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CheckIcon from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-
-// Error the same key
-if (localStorage.getItem("tasks")) {
-  const tasks = JSON.parse(localStorage.getItem("tasks"));
-  let count = 0;
-  const newArr = tasks.map((e) => {
-    return { ...e, id: count++ };
-  });
-  localStorage.setItem("tasks", JSON.stringify(newArr));
-}
-
-// count of task
-let idCount = localStorage.getItem("tasks")
-  ? JSON.parse(localStorage.tasks).length
-  : 0;
+import { v4 as uuidv4 } from "uuid";
 
 export default function Main() {
   const [userInputAdd, setUserInputAdd] = useState({
@@ -32,9 +18,9 @@ export default function Main() {
   );
 
   const [categories, setCategories] = useState([
-    { id: 1, text: "الكل", classActive: "active" },
-    { id: 2, text: "مُكتمل", classActive: "" },
-    { id: 3, text: "غير مُكتمل", classActive: "" },
+    { id: uuidv4(), text: "الكل", classActive: "active" },
+    { id: uuidv4(), text: "مُكتمل", classActive: "" },
+    { id: uuidv4(), text: "غير مُكتمل", classActive: "" },
   ]);
 
   const tasksList = tasks.map((e) => (
@@ -126,9 +112,8 @@ export default function Main() {
       userInputAdd.text !== "" &&
       tasks.every(({ text }) => text !== userInputAdd.text)
     ) {
-      const newObject = { id: idCount, text: userInputAdd.text };
+      const newObject = { id: uuidv4(), text: userInputAdd.text };
       setTasks([...tasks, newObject]);
-      idCount++;
       localStorage.setItem("tasks", JSON.stringify([...tasks, newObject]));
       setUserInputAdd({ ...userInputAdd, text: "" });
     }
