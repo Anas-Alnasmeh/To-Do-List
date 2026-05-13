@@ -28,41 +28,7 @@
   transform: translate(-50%, -50%);
 }
 
-.login-box {
-  color: var(--primary);
-  margin-top: 15px;
-  border-radius: var(--radius);
-  height: 400px;
-  width: 400px;
-  background-image: linear-gradient(150deg, rgb(93, 19, 130) 20%, rgb(84, 18, 142) 70%, rgb(59, 16, 159));
-  padding: 50px 30px;
-  box-shadow: 2px 2px 6px 1px gray;
-  text-align: center;
-}
-
-.login-box .select-botton {
-  margin-top: 40px;
-  display: flex;
-  flex-direction: column;
-}
-
-.login-box .select-botton button {
-  margin-bottom: 20px;
-  color: #a5d9ff;
-  cursor: pointer;
-  border: none;
-  background-color: rgba(255, 255, 255, 0.153);
-  border-radius: 20px;
-  height: 60px;
-  font-size: 18px;
-}
-
-.login-box .select-botton button:hover {
-  background-image: linear-gradient(-150deg, rgb(70, 14, 98), rgb(65, 14, 109), rgb(42, 12, 112));
-  color: var(--primary);
-}
-
-/* Tasks Page */
+/* Tasks */
 
 .tasks-box {
   background-color: var(--primary);

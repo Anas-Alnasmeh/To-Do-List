@@ -1,13 +1,13 @@
 // activation all buttons from all categories
 // edit tasks
 // click to uncomplete task
-// replace maping function with component file
+// convert maping function with component file
+// in userInput: maybe displayStatus not interset yet
 import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import CheckIcon from "@mui/icons-material/Check";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+
 import { v4 as uuidv4 } from "uuid";
+import Task from "./Task";
 
 // localStorage.clear();
 
@@ -80,7 +80,14 @@ export default function Main() {
         </div>
         {categories[0].classActive === "active" ? (
           <>
-            <ul>{maping(tasks, "all")}</ul>
+            <ul>
+              <Task
+                arr={tasks}
+                status="all"
+                handleClickComplete={handleClickComplete}
+                handleClickDelete={handleClickDelete}
+              />
+            </ul>
             <label htmlFor="new-task">مهمة جديدة</label>
             <div className="add-task">
               <input
@@ -104,15 +111,33 @@ export default function Main() {
             </div>
             <div
               className="already-exist"
-              style={{ display: userInputAdd.displayStatus }}
+              style={{
+                display: !tasks.every(({ text }) => text !== userInputAdd.text)
+                  ? userInputAdd.displayStatus
+                  : "none",
+              }}
             >
               هذه المهمة موجودة مسبقا!
             </div>
           </>
         ) : categories[1].classActive === "active" ? (
-          <ul>{maping(completeTasks, "complete")}</ul>
+          <ul>
+            <Task
+              arr={completeTasks}
+              status="complete"
+              handleClickComplete={handleClickComplete}
+              handleClickDelete={handleClickDelete}
+            />
+          </ul>
         ) : (
-          <ul>{maping(unCompleteTasks, "unComplete")}</ul>
+          <ul>
+            <Task
+              arr={unCompleteTasks}
+              status="unComplete"
+              handleClickComplete={handleClickComplete}
+              handleClickDelete={handleClickDelete}
+            />
+          </ul>
         )}
       </div>
     </div>
@@ -130,14 +155,6 @@ export default function Main() {
     }
   }
 
-  function handleClickDelete(id) {
-    const newTasks = tasks.filter((e) => e.id !== id);
-    setTasks(newTasks);
-    localStorage.setItem("tasks", JSON.stringify(newTasks));
-    const newCompTasks = completeTasks.filter((e) => e.id !== id);
-    localStorage.setItem("completeTasks", JSON.stringify(newCompTasks));
-  }
-
   function handleClickComplete(id) {
     let newObj;
     for (let i = 0; i < tasks.length; i++) {
@@ -152,6 +169,15 @@ export default function Main() {
     }
   }
 
+  function handleClickDelete(id) {
+    const newTasks = tasks.filter((e) => e.id !== id);
+    setTasks(newTasks);
+    localStorage.setItem("tasks", JSON.stringify(newTasks));
+    const newCompTasks = completeTasks.filter((e) => e.id !== id);
+    localStorage.setItem("completeTasks", JSON.stringify(newCompTasks));
+    // setUserInputAdd({ ...userInputAdd, displayStatus: "none" });
+  }
+
   function handleCategories(id) {
     const newArr = categories.map((cat) => {
       return cat.id === id
@@ -159,47 +185,5 @@ export default function Main() {
         : { ...cat, classActive: "" };
     });
     setCategories(newArr);
-  }
-
-  function maping(arr, status) {
-    const mystate = status === "all" || status === "unComplete";
-    return arr.map((e) => (
-      <li key={e.id}>
-        {e.text}
-        <div className="icons">
-          <div
-            onClick={() => handleClickComplete(e.id)}
-            className="icon"
-            style={{
-              border: "2px solid #00b900",
-              color: mystate ? "#00b900" : "var(--primary)",
-              backgroundColor: mystate ? "var(--primary)" : "#00b900",
-            }}
-            title="تمت المهمة"
-          >
-            <CheckIcon />
-          </div>
-          {status === "all" ? (
-            <div
-              className="icon"
-              style={{ border: "2px solid #1010d7ed" }}
-              title="تعديل المهمة"
-            >
-              <EditIcon style={{ color: "#1010d7ed" }} />
-            </div>
-          ) : (
-            <></>
-          )}
-          <div
-            onClick={() => handleClickDelete(e.id)}
-            className="icon"
-            style={{ border: "2px solid #bc0000e3" }}
-            title="حذف المهمة"
-          >
-            <DeleteForeverIcon style={{ color: "#bc0000e3" }} />
-          </div>
-        </div>
-      </li>
-    ));
   }
 }

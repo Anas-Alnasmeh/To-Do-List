@@ -1,10 +1,10 @@
 import "./App.css";
-import Sign from "./Component/Sign";
+import Main from "./Component/Main";
 
 export default function App() {
   return (
     <div className="App" lang="ar" dir="rtl">
-      <Sign />
+      <Main />
     </div>
   );
 }
