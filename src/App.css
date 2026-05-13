@@ -73,7 +73,12 @@
 }
 
 .tasks-box h1 {
+  font-size: clamp(19px, 7vw, 32px);
   text-align: center;
+}
+
+.tasks-box h1 *:last-child {
+  font-size: clamp(21px, 8vw, 35px);
 }
 
 .tasks-box .add-task {
@@ -88,6 +93,7 @@
   outline: none;
   border-radius: var(--radius);
   font-size: 16px;
+  height: 40px;
 }
 
 .tasks-box .add-task input {
@@ -104,6 +110,7 @@
   background-color: rgba(130, 0, 0, 0.781);
   color: var(--primary);
   cursor: pointer;
+  padding: 8px 10px;
   transition: var(--transition);
 }
 
@@ -137,9 +144,9 @@
 }
 
 .tasks-box ul li .icon {
-  width: 35px;
-  height: 35px;
-  margin-right: 8px;
+  width: clamp(25px, 5.5vw, 35px);
+  height: clamp(25px, 5.5vw, 35px);
+  margin-right: clamp(4px, 1vw, 8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -147,6 +154,10 @@
   border-radius: 50%;
   cursor: pointer;
   transition: var(--transition);
+}
+
+.tasks-box ul li .icon *:last-child {
+  font-size: clamp(16px, 4vw, 24px);
 }
 
 .tasks-box ul li .icon:hover {
@@ -177,10 +188,10 @@
 
 .categories button {
   width: 90px;
-  height: 35px;
+  min-height: 35px;
   margin: 8px;
-  padding: 8px 10px;
-  font-size: 19px;
+  padding: 8px clamp(6px, 1vw, 10px);
+  font-size: clamp(14px, 4vw, 19px);
   cursor: pointer;
   transition: var(--transition);
   border-radius: var(--radius);
@@ -198,13 +209,40 @@
   box-shadow: 0 0 6px 2px rgb(128 128 128 / 39%);
 }
 
-/* .success {
-  color: green;
-} */
-
 @keyframes big-title {
   to {
     opacity: 1;
     margin-left: 0;
   }
+}
+
+@media (max-width: 520px) {
+  .tasks-box {
+    width: 100vw;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .categories button {
+    width: 100px;
+    margin: 6px;
+  }
+}
+
+@media (max-width: 320px) {
+
+  .tasks-box .add-task {
+    flex-direction: column;
+    height: 80px;
+  }
+
+  .tasks-box .add-task input,
+  .tasks-box .add-task button {
+    width: 100%;
+  }
+
+  .tasks-box .already-exist {
+    width: 100%;
+  }
+
 }
