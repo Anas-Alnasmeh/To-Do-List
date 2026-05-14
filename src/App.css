@@ -122,6 +122,11 @@
   transition: var(--transition);
 }
 
+.tasks-box ul li .icon:first-of-type {
+  color: #00b900;
+  background-color: var(--primary);
+}
+
 .tasks-box ul li .icon *:last-child {
   font-size: clamp(16px, 4vw, 24px);
 }

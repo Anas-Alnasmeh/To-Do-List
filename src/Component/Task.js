@@ -4,11 +4,11 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export default function Task({
   arr,
-  status,
+  // status = false,
   handleClickComplete,
   handleClickDelete,
 }) {
-  const mystate = status === "all" || status === "unComplete";
+  // const mystate = status === "all" || status === "unComplete";
   return arr.map((e) => (
     <li key={e.id}>
       {e.text}
@@ -18,24 +18,21 @@ export default function Task({
           className="icon"
           style={{
             border: "2px solid #00b900",
-            color: mystate ? "#00b900" : "var(--primary)",
-            backgroundColor: mystate ? "var(--primary)" : "#00b900",
+            // color: mystate ? "#00b900" : "var(--primary)",
+            // backgroundColor: mystate ? "var(--primary)" : "#00b900",
           }}
           title="تمت المهمة"
         >
           <CheckIcon />
         </div>
-        {status === "all" ? (
-          <div
-            className="icon"
-            style={{ border: "2px solid #1010d7ed" }}
-            title="تعديل المهمة"
-          >
-            <EditIcon style={{ color: "#1010d7ed" }} />
-          </div>
-        ) : (
-          <></>
-        )}
+        <div
+          className="icon"
+          style={{ border: "2px solid #1010d7ed" }}
+          title="تعديل المهمة"
+        >
+          <EditIcon style={{ color: "#1010d7ed" }} />
+        </div>
+
         <div
           onClick={() => handleClickDelete(e.id)}
           className="icon"

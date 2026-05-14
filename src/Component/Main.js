@@ -5,7 +5,6 @@
 // in userInput: maybe displayStatus not interset yet
 import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-
 import { v4 as uuidv4 } from "uuid";
 import Task from "./Task";
 
@@ -18,9 +17,11 @@ export default function Main() {
       : [],
   );
 
-  const completeTasks = localStorage.getItem("completeTasks")
-    ? JSON.parse(localStorage.getItem("completeTasks"))
-    : [];
+  const [completeTasks, setCompleteTasks] = useState(
+    localStorage.getItem("completeTasks")
+      ? JSON.parse(localStorage.getItem("completeTasks"))
+      : [],
+  );
 
   let arrAll = [...tasks];
 
@@ -41,18 +42,20 @@ export default function Main() {
     }
   }
 
-  // console.log(unCompleteTasks);
-
   const [userInputAdd, setUserInputAdd] = useState({
     text: "",
     displayStatus: "none",
   });
 
-  const [categories, setCategories] = useState([
-    { id: uuidv4(), text: "الكل", classActive: "active" },
-    { id: uuidv4(), text: "مُكتمل", classActive: "" },
-    { id: uuidv4(), text: "غير مُكتمل", classActive: "" },
-  ]);
+  const [categories, setCategories] = useState(
+    sessionStorage.getItem("categories")
+      ? JSON.parse(sessionStorage.getItem("categories"))
+      : [
+          { id: uuidv4(), text: "الكل", classActive: "active" },
+          { id: uuidv4(), text: "مُكتمل", classActive: "" },
+          { id: uuidv4(), text: "غير مُكتمل", classActive: "" },
+        ],
+  );
 
   return (
     <div className="container">
@@ -83,7 +86,7 @@ export default function Main() {
             <ul>
               <Task
                 arr={tasks}
-                status="all"
+                // status={true}
                 handleClickComplete={handleClickComplete}
                 handleClickDelete={handleClickDelete}
               />
@@ -124,7 +127,7 @@ export default function Main() {
           <ul>
             <Task
               arr={completeTasks}
-              status="complete"
+              // status="complete"
               handleClickComplete={handleClickComplete}
               handleClickDelete={handleClickDelete}
             />
@@ -133,7 +136,7 @@ export default function Main() {
           <ul>
             <Task
               arr={unCompleteTasks}
-              status="unComplete"
+              // status="unComplete"
               handleClickComplete={handleClickComplete}
               handleClickDelete={handleClickDelete}
             />
@@ -164,8 +167,11 @@ export default function Main() {
       }
     }
     if (completeTasks.every(({ text }) => text !== newObj.text)) {
-      completeTasks.push(newObj);
-      localStorage.setItem("completeTasks", JSON.stringify(completeTasks));
+      setCompleteTasks([...completeTasks, newObj]);
+      localStorage.setItem(
+        "completeTasks",
+        JSON.stringify([...completeTasks, newObj]),
+      );
     }
   }
 
@@ -174,8 +180,8 @@ export default function Main() {
     setTasks(newTasks);
     localStorage.setItem("tasks", JSON.stringify(newTasks));
     const newCompTasks = completeTasks.filter((e) => e.id !== id);
+    setCompleteTasks(newCompTasks);
     localStorage.setItem("completeTasks", JSON.stringify(newCompTasks));
-    // setUserInputAdd({ ...userInputAdd, displayStatus: "none" });
   }
 
   function handleCategories(id) {
@@ -185,5 +191,6 @@ export default function Main() {
         : { ...cat, classActive: "" };
     });
     setCategories(newArr);
+    sessionStorage.setItem("categories", JSON.stringify(newArr));
   }
 }
