@@ -1,14 +1,14 @@
 // activation all buttons from all categories
 // edit tasks
 // click to uncomplete task
-// convert maping function with component file
 // in userInput: maybe displayStatus not interset yet
+
+//
+
 import { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { v4 as uuidv4 } from "uuid";
 import Task from "./Task";
-
-// localStorage.clear();
 
 export default function Main() {
   const [tasks, setTasks] = useState(
@@ -16,31 +16,6 @@ export default function Main() {
       ? JSON.parse(localStorage.getItem("tasks"))
       : [],
   );
-
-  const [completeTasks, setCompleteTasks] = useState(
-    localStorage.getItem("completeTasks")
-      ? JSON.parse(localStorage.getItem("completeTasks"))
-      : [],
-  );
-
-  let arrAll = [...tasks];
-
-  let arrCompleted = [...completeTasks];
-
-  let unCompleteTasks = [];
-
-  arrAll = arrAll.sort((a, b) => a.text.localeCompare(b.text));
-  arrCompleted = arrCompleted.sort((a, b) => a.text.localeCompare(b.text));
-
-  while (arrAll.length > 0) {
-    if (arrAll[0].text !== arrCompleted[0]?.text) {
-      unCompleteTasks.push(arrAll[0]);
-      arrAll.shift();
-    } else {
-      arrAll.shift();
-      arrCompleted.shift();
-    }
-  }
 
   const [userInputAdd, setUserInputAdd] = useState({
     text: "",
@@ -86,7 +61,6 @@ export default function Main() {
             <ul>
               <Task
                 arr={tasks}
-                // status={true}
                 handleClickComplete={handleClickComplete}
                 handleClickDelete={handleClickDelete}
               />
@@ -96,18 +70,7 @@ export default function Main() {
               <input
                 id="new-task"
                 value={userInputAdd.text}
-                onChange={(e) => {
-                  setUserInputAdd({
-                    text: e.target.value,
-                    displayStatus: "none",
-                  });
-                  if (!tasks.every(({ text }) => text !== e.target.value)) {
-                    setUserInputAdd({
-                      text: e.target.value,
-                      displayStatus: "block",
-                    });
-                  }
-                }}
+                onChange={handleUserInput}
                 placeholder="أكتب مهمة..."
               />
               <button onClick={handleClickAdd}>إضافة مهمة</button>
@@ -116,7 +79,7 @@ export default function Main() {
               className="already-exist"
               style={{
                 display: !tasks.every(({ text }) => text !== userInputAdd.text)
-                  ? userInputAdd.displayStatus
+                  ? "block"
                   : "none",
               }}
             >
@@ -126,8 +89,7 @@ export default function Main() {
         ) : categories[1].classActive === "active" ? (
           <ul>
             <Task
-              arr={completeTasks}
-              // status="complete"
+              arr={tasks.filter((e) => e.classCom === "com")}
               handleClickComplete={handleClickComplete}
               handleClickDelete={handleClickDelete}
             />
@@ -135,8 +97,7 @@ export default function Main() {
         ) : (
           <ul>
             <Task
-              arr={unCompleteTasks}
-              // status="unComplete"
+              arr={tasks.filter((e) => e.classCom !== "com")}
               handleClickComplete={handleClickComplete}
               handleClickDelete={handleClickDelete}
             />
@@ -146,12 +107,26 @@ export default function Main() {
     </div>
   );
 
+  function handleUserInput(e) {
+    const inputText = e.target.value;
+    setUserInputAdd({
+      text: inputText,
+      displayStatus: "none",
+    });
+    if (!tasks.every(({ text }) => text !== inputText)) {
+      setUserInputAdd({
+        text: inputText,
+        displayStatus: "block",
+      });
+    }
+  }
+
   function handleClickAdd() {
     if (
       userInputAdd.text !== "" &&
       tasks.every(({ text }) => text !== userInputAdd.text)
     ) {
-      const newObject = { id: uuidv4(), text: userInputAdd.text };
+      const newObject = { id: uuidv4(), text: userInputAdd.text, classCom: "" };
       setTasks([...tasks, newObject]);
       localStorage.setItem("tasks", JSON.stringify([...tasks, newObject]));
       setUserInputAdd({ ...userInputAdd, text: "" });
@@ -160,18 +135,16 @@ export default function Main() {
 
   function handleClickComplete(id) {
     let newObj;
+    const newArr = [...tasks];
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].id === id) {
-        newObj = tasks[i];
+        newObj = { ...tasks[i] };
+        newObj.classCom = "com";
+        newArr[i] = newObj;
+        setTasks(newArr);
+        localStorage.setItem("tasks", JSON.stringify(newArr));
         break;
       }
-    }
-    if (completeTasks.every(({ text }) => text !== newObj.text)) {
-      setCompleteTasks([...completeTasks, newObj]);
-      localStorage.setItem(
-        "completeTasks",
-        JSON.stringify([...completeTasks, newObj]),
-      );
     }
   }
 
@@ -179,9 +152,6 @@ export default function Main() {
     const newTasks = tasks.filter((e) => e.id !== id);
     setTasks(newTasks);
     localStorage.setItem("tasks", JSON.stringify(newTasks));
-    const newCompTasks = completeTasks.filter((e) => e.id !== id);
-    setCompleteTasks(newCompTasks);
-    localStorage.setItem("completeTasks", JSON.stringify(newCompTasks));
   }
 
   function handleCategories(id) {

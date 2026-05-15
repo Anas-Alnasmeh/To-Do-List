@@ -2,13 +2,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-export default function Task({
-  arr,
-  // status = false,
-  handleClickComplete,
-  handleClickDelete,
-}) {
-  // const mystate = status === "all" || status === "unComplete";
+export default function Task({ arr, handleClickComplete, handleClickDelete }) {
   return arr.map((e) => (
     <li key={e.id}>
       {e.text}
@@ -18,8 +12,9 @@ export default function Task({
           className="icon"
           style={{
             border: "2px solid #00b900",
-            // color: mystate ? "#00b900" : "var(--primary)",
-            // backgroundColor: mystate ? "var(--primary)" : "#00b900",
+            color: e.classCom === "com" ? "var(--primary)" : "#00b900",
+            backgroundColor:
+              e.classCom === "com" ? "#00b900" : "var(--primary)",
           }}
           title="تمت المهمة"
         >
