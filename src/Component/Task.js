@@ -2,7 +2,12 @@ import CheckIcon from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-export default function Task({ arr, handleClickComplete, handleClickDelete }) {
+export default function Task({
+  arr,
+  handleClickComplete,
+  handleClickDelete,
+  handleClickEdit,
+}) {
   return arr.map((e) => (
     <li key={e.id}>
       {e.text}
@@ -21,6 +26,7 @@ export default function Task({ arr, handleClickComplete, handleClickDelete }) {
           <CheckIcon />
         </div>
         <div
+          onClick={() => handleClickEdit(e)}
           className="icon"
           style={{ border: "2px solid #1010d7ed" }}
           title="تعديل المهمة"

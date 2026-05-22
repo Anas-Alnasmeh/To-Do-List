@@ -1,9 +1,11 @@
 /* Css Variables */
 :root {
-  --radius: 10px;
+  --radius: 8px;
   --primary: #eee;
   --transition: .3s;
   --transform: translateY(-2px);
+  --input-focus: 2px solid rgba(0, 0, 121, 0.813);
+  --shadow: 0 0 6px 2px rgb(128 128 128 / 39%);
 }
 
 * {
@@ -23,14 +25,14 @@
 
 .container {
   position: absolute;
-  top: 40%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%);
 }
 
 /* Tasks */
 
 .tasks-box {
+  margin-top: 100px;
   background-color: var(--primary);
   border-radius: var(--radius);
   min-height: 300px;
@@ -68,7 +70,7 @@
 }
 
 .tasks-box .add-task input:focus {
-  border: 2px solid rgba(0, 0, 121, 0.813);
+  border: var(--input-focus);
 }
 
 .tasks-box .add-task button {
@@ -100,7 +102,13 @@
   background-color: rgba(0, 0, 121, 0.813);
   border-radius: var(--radius);
   color: var(--primary);
+  transition: var(--transition);
   word-break: break-word;
+}
+
+.tasks-box ul li:hover {
+  transform: var(--transform);
+  box-shadow: var(--shadow);
 }
 
 .tasks-box ul li .icons {
@@ -120,11 +128,6 @@
   border-radius: 50%;
   cursor: pointer;
   transition: var(--transition);
-}
-
-.tasks-box ul li .icon:first-of-type {
-  color: #00b900;
-  background-color: var(--primary);
 }
 
 .tasks-box ul li .icon *:last-child {
@@ -177,7 +180,100 @@
 
 .categories button:hover {
   transform: var(--transform);
-  box-shadow: 0 0 6px 2px rgb(128 128 128 / 39%);
+  box-shadow: var(--shadow);
+}
+
+/* edit-box */
+
+.edit-container {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.578);
+}
+
+.edit-box {
+  margin-top: 100px;
+  height: 280px;
+  width: 440px;
+  background-color: #ddd;
+  border-radius: var(--radius);
+  text-align: center;
+  padding: 20px 30px;
+}
+
+.edit-box h2 {
+  margin-top: 0;
+  padding-bottom: 15px;
+  border-bottom: var(--input-focus);
+}
+
+.edit-box div * {
+  height: 40px;
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 15px;
+  border: none;
+  outline: none;
+  border-radius: var(--radius);
+  font-size: 18px;
+}
+
+.edit-box div input:focus {
+  border: var(--input-focus);
+}
+
+.edit-box div button {
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.edit-box div button:first-of-type {
+  background-color: rgba(0, 0, 121, 0.813);
+  color: var(--primary);
+}
+
+.edit-box div button:first-of-type:hover {
+  background-color: rgba(0, 0, 121, 0.959);
+}
+
+.edit-box div button:last-of-type {
+  background-color: rgba(130, 0, 0, 0.781);
+  color: var(--primary);
+}
+
+.edit-box div button:last-of-type:hover {
+  background-color: rgba(130, 0, 0, 0.95);
+}
+
+/* Alert */
+
+.alert {
+  width: clamp(200px, 50vw, 400px);
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 1000;
+  transform: translateY(25px);
+  opacity: 0;
+  animation: alert 6s ease-in-out;
+}
+
+@keyframes alert {
+  5% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  95% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(25px);
+    opacity: 0;
+  }
 }
 
 @keyframes big-title {
