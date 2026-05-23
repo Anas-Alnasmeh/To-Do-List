@@ -27,12 +27,12 @@
   position: absolute;
   left: 50%;
   transform: translate(-50%);
+  margin-top: 100px;
 }
 
 /* Tasks */
 
 .tasks-box {
-  margin-top: 100px;
   background-color: var(--primary);
   border-radius: var(--radius);
   min-height: 300px;
@@ -75,7 +75,7 @@
 
 .tasks-box .add-task button {
   width: calc(30% - 5px);
-  background-color: rgba(130, 0, 0, 0.781);
+  background-color: rgb(28 138 225);
   color: var(--primary);
   cursor: pointer;
   padding: 8px 10px;
@@ -83,7 +83,7 @@
 }
 
 .tasks-box .add-task button:hover {
-  background-color: rgba(174, 3, 3, 0.858);
+  background-color: rgba(1, 82, 163, 0.813);
 }
 
 .tasks-box ul {
@@ -189,7 +189,7 @@
   position: fixed;
   width: 100%;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.578);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .edit-box {
@@ -238,12 +238,84 @@
 }
 
 .edit-box div button:last-of-type {
-  background-color: rgba(130, 0, 0, 0.781);
-  color: var(--primary);
+  background-color: #e5e7eb;
+  color: #374151;
 }
 
 .edit-box div button:last-of-type:hover {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Delete */
+
+.delete-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 200px;
+  width: 400px;
+  background-color: #ddd;
+  border-radius: 0 var(--radius) var(--radius);
+  text-align: center;
+  padding: 20px 30px;
+  border-top: 3px solid rgba(148, 0, 0, 0.97);
+}
+
+.exit {
+  position: absolute;
+  cursor: pointer;
+  top: -15px;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #f3f4f6;
+  color: #6b7280;
+  font-weight: bold;
+  font-size: 20px;
+  transition: var(--transition);
+}
+
+.exit:hover {
+  color: #374151;
+  background-color: #e5e7eb;
+}
+
+.delete-box div {
+  display: flex;
+  justify-content: space-evenly;
+  width: 50%;
+}
+
+.delete-box div button {
+  transition: var(--transition);
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+  width: 60px;
+  height: 30px;
+}
+
+.delete-box div button:first-of-type {
+  color: var(--primary);
+  background-color: rgba(130, 0, 0, 0.781);
+}
+
+.delete-box div button:first-of-type:hover {
   background-color: rgba(130, 0, 0, 0.95);
+}
+
+.delete-box div button:last-of-type:hover {
+  background-color: #eeeeee9e;
 }
 
 /* Alert */

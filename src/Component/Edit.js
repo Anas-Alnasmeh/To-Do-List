@@ -7,6 +7,9 @@ export default function Edit({ handleEditReset, tasks, setTasks, editTask }) {
     <>
       <div className="edit-container" onClick={handleEditReset}></div>
       <div className="edit-box container">
+        <button className="exit" onClick={handleEditReset}>
+          ×
+        </button>
         <h2>
           تعديل المهمة
           <EditNoteIcon
@@ -24,24 +27,26 @@ export default function Edit({ handleEditReset, tasks, setTasks, editTask }) {
           />
           <button
             onClick={() => {
-              let newObj;
-              const newArr = [...tasks];
-              for (let i = 0; i < tasks.length; i++) {
-                if (tasks[i].text === editTask.element.text) {
-                  newObj = { ...tasks[i] };
-                  newObj.text = userInput;
-                  newArr[i] = newObj;
-                  break;
+              if (userInput !== "") {
+                let newObj;
+                const newArr = [...tasks];
+                for (let i = 0; i < tasks.length; i++) {
+                  if (tasks[i].text === editTask.element.text) {
+                    newObj = { ...tasks[i] };
+                    newObj.text = userInput;
+                    newArr[i] = newObj;
+                    break;
+                  }
                 }
+                setTasks(newArr);
+                localStorage.setItem("tasks", JSON.stringify(newArr));
+                handleEditReset();
               }
-              setTasks(newArr);
-              localStorage.setItem("tasks", JSON.stringify(newArr));
-              handleEditReset();
             }}
           >
             تعديل
           </button>
-          <button onClick={handleEditReset}>إلغاء</button>
+          <button onClick={handleEditReset}>رجوع</button>
         </div>
       </div>
     </>

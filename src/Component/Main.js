@@ -11,6 +11,7 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { v4 as uuidv4 } from "uuid";
 import Task from "./Task";
 import Edit from "./Edit";
+import Delete from "./Delete";
 import AlertMessage from "./AlertMessage";
 
 export default function Main() {
@@ -35,7 +36,9 @@ export default function Main() {
         ],
   );
 
-  const [editTask, setEditTask] = useState({ status: false, id: "" });
+  const [editTask, setEditTask] = useState({ status: false, element: {} });
+
+  const [deleteTask, setDeleteTask] = useState({ status: false, id: "" });
 
   const [alert, setAlert] = useState({ status: false, text: "", severity: "" });
 
@@ -126,6 +129,13 @@ export default function Main() {
           setTasks={setTasks}
           editTask={editTask}
         />
+      ) : deleteTask.status ? (
+        <Delete
+          handleEditReset={handleEditReset}
+          tasks={tasks}
+          setTasks={setTasks}
+          deleteTask={deleteTask}
+        />
       ) : (
         <></>
       )}
@@ -138,6 +148,7 @@ export default function Main() {
 
   function handleEditReset() {
     setEditTask({ status: false, element: {} });
+    setDeleteTask({ status: false, id: "" });
   }
 
   function handleUserInput(e) {
@@ -196,9 +207,7 @@ export default function Main() {
   }
 
   function handleClickDelete(id) {
-    const newTasks = tasks.filter((e) => e.id !== id);
-    setTasks(newTasks);
-    localStorage.setItem("tasks", JSON.stringify(newTasks));
+    setDeleteTask({ status: true, id: id });
   }
 
   function handleCategories(id) {
