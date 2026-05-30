@@ -9,24 +9,29 @@ export default function Task({
   handleClickEdit,
 }) {
   return arr.map((e) => (
-    <li key={e.id}>
+    <li
+      title={e.isCompleted ? "مُنجز" : "غير مُنجز"}
+      key={e.id}
+      style={{
+        backgroundColor: e.isCompleted ? "#108910" : "rgba(0, 0, 121, 0.813)",
+      }}
+    >
       {e.text}
       <div className="icons">
         <div
+          title={e.isCompleted ? "إلغاء الإنجاز" : "تحديد كمُنجز"}
           onClick={() => handleClickComplete(e.id)}
           className="icon"
           style={{
             border: "2px solid #00b900",
-            color: e.classCom === "com" ? "var(--primary)" : "#00b900",
-            backgroundColor:
-              e.classCom === "com" ? "#00b900" : "var(--primary)",
+            color: e.isCompleted ? "var(--primary)" : "#00b900",
+            backgroundColor: e.isCompleted ? "#00b900" : "var(--primary)",
           }}
-          title="تمت المهمة"
         >
           <CheckIcon />
         </div>
         <div
-          onClick={() => handleClickEdit(e)}
+          onClick={() => handleClickEdit(e.text)}
           className="icon"
           style={{ border: "2px solid #1010d7ed" }}
           title="تعديل المهمة"

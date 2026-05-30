@@ -2,7 +2,10 @@ export default function Delete({
   handleEditReset,
   tasks,
   setTasks,
-  deleteTask,
+  id,
+  userInputAdd,
+  setUserInputAdd,
+  showAlert,
 }) {
   return (
     <>
@@ -16,10 +19,17 @@ export default function Delete({
           <div>
             <button
               onClick={() => {
-                const newTasks = tasks.filter((e) => e.id !== deleteTask.id);
+                const newTasks = tasks.filter((e) => e.id !== id);
                 setTasks(newTasks);
                 localStorage.setItem("tasks", JSON.stringify(newTasks));
+                setUserInputAdd({
+                  ...userInputAdd,
+                  alreadyExist: !newTasks.every(
+                    ({ text }) => text !== userInputAdd.text,
+                  ),
+                });
                 handleEditReset();
+                showAlert("تم حذف المهمة!", "error");
               }}
             >
               حذف

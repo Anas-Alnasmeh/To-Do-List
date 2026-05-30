@@ -1,8 +1,19 @@
 import { useState } from "react";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 
-export default function Edit({ handleEditReset, tasks, setTasks, editTask }) {
-  const [userInput, setUserInput] = useState(editTask.element.text);
+export default function Edit({
+  handleEditReset,
+  tasks,
+  setTasks,
+  text,
+  userInputAdd,
+  setUserInputAdd,
+  showAlert,
+}) {
+  const [userInputEdit, setUserInputEdit] = useState({
+    text: text,
+    alreadyExist: false,
+  });
   return (
     <>
       <div className="edit-container" onClick={handleEditReset}></div>
@@ -19,34 +30,53 @@ export default function Edit({ handleEditReset, tasks, setTasks, editTask }) {
         </h2>
         <div>
           <input
-            value={userInput}
+            value={userInputEdit.text}
             autoFocus
             onChange={(e) => {
-              setUserInput(e.target.value);
+              const inputText = e.target.value;
+              setUserInputEdit({
+                text: inputText,
+                alreadyExist: !tasks.every(({ text }) => text !== inputText),
+              });
             }}
           />
           <button
+            disabled={
+              userInputEdit.text === "" ||
+              userInputEdit.text === text ||
+              userInputEdit.alreadyExist
+            }
             onClick={() => {
-              if (userInput !== "") {
-                let newObj;
-                const newArr = [...tasks];
-                for (let i = 0; i < tasks.length; i++) {
-                  if (tasks[i].text === editTask.element.text) {
-                    newObj = { ...tasks[i] };
-                    newObj.text = userInput;
-                    newArr[i] = newObj;
-                    break;
-                  }
-                }
+              if (userInputEdit.text !== "") {
+                const newArr = tasks.map((e) => {
+                  return e.text === text
+                    ? { ...e, text: userInputEdit.text }
+                    : e;
+                });
                 setTasks(newArr);
                 localStorage.setItem("tasks", JSON.stringify(newArr));
+                setUserInputAdd({
+                  ...userInputAdd,
+                  alreadyExist: !newArr.every(
+                    ({ text }) => text !== userInputAdd.text,
+                  ),
+                });
                 handleEditReset();
+                showAlert("تم تعديل المهمة بنجاح", "info");
               }
             }}
           >
             تعديل
           </button>
           <button onClick={handleEditReset}>رجوع</button>
+          <div
+            className="already-exist-edit"
+            style={{
+              opacity: userInputEdit.alreadyExist ? "1" : "0",
+            }}
+          >
+            هذه المهمة موجودة مسبقا!
+          </div>
         </div>
       </div>
     </>

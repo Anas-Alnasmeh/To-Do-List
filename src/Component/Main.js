@@ -1,8 +1,6 @@
-// activation all buttons from all categories
-// in userInput: maybe displayStatus not interset yet
 // add alert to any procress (add, edit, delete) to make sure the user know what is going on
-// already exist alert in add task, maybe add it to edit task as well
-// already exist maybe user input empty, add alert for that as well
+// popup problem
+// Add number up to categories such as: (5 => all, 3 => completed, 2 => uncompleted)
 
 //
 
@@ -13,6 +11,7 @@ import Task from "./Task";
 import Edit from "./Edit";
 import Delete from "./Delete";
 import AlertMessage from "./AlertMessage";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 
 export default function Main() {
   const [tasks, setTasks] = useState(
@@ -23,7 +22,7 @@ export default function Main() {
 
   const [userInputAdd, setUserInputAdd] = useState({
     text: "",
-    displayStatus: "none",
+    alreadyExist: false,
   });
 
   const [categories, setCategories] = useState(
@@ -36,11 +35,13 @@ export default function Main() {
         ],
   );
 
-  const [editTask, setEditTask] = useState({ status: false, element: {} });
+  const [editTask, setEditTask] = useState({ status: false, text: "" });
 
   const [deleteTask, setDeleteTask] = useState({ status: false, id: "" });
 
   const [alert, setAlert] = useState({ status: false, text: "", severity: "" });
+
+  const bookmarkAddedIconStatus = tasks.every((e) => e.isCompleted);
 
   return (
     <>
@@ -63,6 +64,19 @@ export default function Main() {
                   onClick={() => handleCategories(id)}
                   className={classActive}
                 >
+                  {text === "الكل" && (
+                    <BookmarkAddedIcon
+                      titleAccess={
+                        bookmarkAddedIconStatus ? "جميع المهام مُكتملة" : ""
+                      }
+                      className="bookmarkAddedIcon"
+                      fontSize="small"
+                      style={{
+                        transition: "var(--transition)",
+                        opacity: bookmarkAddedIconStatus ? "1" : "0",
+                      }}
+                    />
+                  )}
                   {text}
                 </button>
               );
@@ -86,16 +100,19 @@ export default function Main() {
                   onChange={handleUserInput}
                   placeholder="أكتب مهمة..."
                 />
-                <button onClick={handleClickAdd}>إضافة مهمة</button>
+                <button
+                  disabled={
+                    userInputAdd.text === "" || userInputAdd.alreadyExist
+                  }
+                  onClick={handleClickAdd}
+                >
+                  إضافة مهمة
+                </button>
               </div>
               <div
                 className="already-exist"
                 style={{
-                  display: !tasks.every(
-                    ({ text }) => text !== userInputAdd.text,
-                  )
-                    ? "block"
-                    : "none",
+                  opacity: userInputAdd.alreadyExist ? "1" : "0",
                 }}
               >
                 هذه المهمة موجودة مسبقا!
@@ -104,7 +121,7 @@ export default function Main() {
           ) : categories[1].classActive === "active" ? (
             <ul>
               <Task
-                arr={tasks.filter((e) => e.classCom === "com")}
+                arr={tasks.filter((e) => e.isCompleted)}
                 handleClickComplete={handleClickComplete}
                 handleClickDelete={handleClickDelete}
                 handleClickEdit={handleClickEdit}
@@ -113,7 +130,7 @@ export default function Main() {
           ) : (
             <ul>
               <Task
-                arr={tasks.filter((e) => e.classCom !== "com")}
+                arr={tasks.filter((e) => !e.isCompleted)}
                 handleClickComplete={handleClickComplete}
                 handleClickDelete={handleClickDelete}
                 handleClickEdit={handleClickEdit}
@@ -127,14 +144,20 @@ export default function Main() {
           handleEditReset={handleEditReset}
           tasks={tasks}
           setTasks={setTasks}
-          editTask={editTask}
+          text={editTask.text}
+          userInputAdd={userInputAdd}
+          setUserInputAdd={setUserInputAdd}
+          showAlert={showAlert}
         />
       ) : deleteTask.status ? (
         <Delete
           handleEditReset={handleEditReset}
           tasks={tasks}
           setTasks={setTasks}
-          deleteTask={deleteTask}
+          id={deleteTask.id}
+          userInputAdd={userInputAdd}
+          setUserInputAdd={setUserInputAdd}
+          showAlert={showAlert}
         />
       ) : (
         <></>
@@ -142,12 +165,12 @@ export default function Main() {
     </>
   );
 
-  function handleClickEdit(e) {
-    setEditTask({ status: true, element: e });
+  function handleClickEdit(text) {
+    setEditTask({ status: true, text: text });
   }
 
   function handleEditReset() {
-    setEditTask({ status: false, element: {} });
+    setEditTask({ status: false, text: "" });
     setDeleteTask({ status: false, id: "" });
   }
 
@@ -155,55 +178,47 @@ export default function Main() {
     const inputText = e.target.value;
     setUserInputAdd({
       text: inputText,
-      displayStatus: "none",
+      alreadyExist: !tasks.every(({ text }) => text !== inputText),
     });
-    if (!tasks.every(({ text }) => text !== inputText)) {
-      setUserInputAdd({
-        text: inputText,
-        displayStatus: "block",
-      });
-    }
   }
 
   function handleClickAdd() {
-    if (
-      userInputAdd.text !== "" &&
-      tasks.every(({ text }) => text !== userInputAdd.text)
-    ) {
-      const newObject = { id: uuidv4(), text: userInputAdd.text, classCom: "" };
+    if (!userInputAdd.alreadyExist) {
+      const newObject = {
+        id: uuidv4(),
+        text: userInputAdd.text,
+        isCompleted: false,
+      };
       setTasks([...tasks, newObject]);
       localStorage.setItem("tasks", JSON.stringify([...tasks, newObject]));
       setUserInputAdd({ ...userInputAdd, text: "" });
-      setAlert({
-        status: true,
-        text: "تمت إضافة المهمة بنجاح!",
-        severity: "success",
-      });
-      setTimeout(
-        () =>
-          setAlert(() => {
-            return { status: false, text: "", severity: "" };
-          }),
-        5000,
-      );
+      showAlert("تمت إضافة المهمة بنجاح", "success");
     }
   }
 
+  function showAlert(sentText, state) {
+    setAlert({
+      status: true,
+      text: sentText,
+      severity: state,
+    });
+    setTimeout(
+      () =>
+        setAlert(() => {
+          return { status: false, text: "", severity: "" };
+        }),
+      6000,
+    );
+  }
+
   function handleClickComplete(id) {
-    let newObj;
-    const newArr = [...tasks];
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].id === id) {
-        newObj = { ...tasks[i] };
-        newObj.classCom === "com"
-          ? (newObj.classCom = "")
-          : (newObj.classCom = "com");
-        newArr[i] = newObj;
-        setTasks(newArr);
-        localStorage.setItem("tasks", JSON.stringify(newArr));
-        break;
-      }
-    }
+    const newArr = tasks.map((task) => {
+      return task.id === id
+        ? { ...task, isCompleted: !task.isCompleted }
+        : task;
+    });
+    setTasks(newArr);
+    localStorage.setItem("tasks", JSON.stringify(newArr));
   }
 
   function handleClickDelete(id) {
