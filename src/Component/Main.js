@@ -40,7 +40,8 @@ export default function Main() {
     severity: "",
   });
 
-  const bookmarkAddedIconStatus = tasks.every((e) => e.isCompleted);
+  const bookmarkAddedIconStatus =
+    tasks.length > 0 && tasks.every((e) => e.isCompleted);
 
   let showcategorieTasks = tasks;
 
