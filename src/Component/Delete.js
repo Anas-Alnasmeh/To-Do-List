@@ -10,7 +10,7 @@ export default function Delete({
   return (
     <>
       <div className="edit-container" onClick={handleEditReset}></div>
-      <div className="container">
+      <div className="delete container">
         <button className="exit" onClick={handleEditReset}>
           ×
         </button>

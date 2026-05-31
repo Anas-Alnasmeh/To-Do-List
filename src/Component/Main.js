@@ -48,11 +48,13 @@ export default function Main() {
 
   const bookmarkAddedIconStatus = tasks.every((e) => e.isCompleted);
 
-  const timeoutRef = useRef(null);
+  const timeoutRefOne = useRef(null);
+  const timeoutRefTwo = useRef(null);
+  const timeoutRefThree = useRef(null);
 
   return (
     <>
-      {alert.status && <AlertMessage alert={alert} />}
+      <AlertMessage alert={alert} />
       <div className="container">
         <div className="tasks-box">
           <h1>
@@ -204,31 +206,51 @@ export default function Main() {
   }
 
   function showAlert(sentText, state) {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+    if (timeoutRefOne.current) {
+      clearTimeout(timeoutRefOne.current);
+    }
+    if (timeoutRefTwo.current) {
+      clearTimeout(timeoutRefTwo.current);
+    }
+    if (timeoutRefThree.current) {
+      clearTimeout(timeoutRefThree.current);
     }
     setAlert({
       status: true,
-      hide: false,
+      hide: true,
       text: sentText,
       severity: state,
     });
-    timeoutRef.current = setTimeout(() => {
-      setAlert((prev) => ({ ...prev, hide: true }));
-      setTimeout(() => {
-        setAlert({ status: false, hide: false, text: "", severity: "" });
-      }, 300);
-    }, 6000);
+    timeoutRefOne.current = setTimeout(() => {
+      timeoutRefTwo.current = setTimeout(() => {
+        setAlert((prev) => ({ ...prev, hide: false }));
+        timeoutRefThree.current = setTimeout(() => {
+          setAlert({
+            status: false,
+            hide: false,
+            text: "",
+            severity: "",
+          });
+        }, 300);
+      }, 6000);
+    }, 300);
   }
 
   function handleClickComplete(id) {
+    let show;
     const newArr = tasks.map((task) => {
-      return task.id === id
-        ? { ...task, isCompleted: !task.isCompleted }
-        : task;
+      if (task.id === id) {
+        show = task.isCompleted;
+        return { ...task, isCompleted: !task.isCompleted };
+      }
+      return task;
     });
     setTasks(newArr);
     localStorage.setItem("tasks", JSON.stringify(newArr));
+    showAlert(
+      show ? "تم إلغاء إنجاز المهمة!" : "تم تحديد المهمة كمُنجز",
+      "info",
+    );
   }
 
   function handleClickDelete(id) {

@@ -6,7 +6,13 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 export default function AlertMessage({ alert }) {
   return (
     <Alert
-      style={{ fontSize: "16px" }}
+      style={{
+        fontSize: "16px",
+        opacity: alert.hide && alert.status ? "1" : "0",
+        transform:
+          alert.hide && alert.status ? "translateY(0)" : "translateY(25px)",
+        transition: "all 300ms ease-in-out",
+      }}
       icon={
         alert.severity === "error" ? (
           <DeleteForeverIcon
@@ -27,7 +33,7 @@ export default function AlertMessage({ alert }) {
       }
       variant="filled"
       severity={alert.severity}
-      className={`alert ${alert.hide ? "hide" : ""}`}
+      className="alert"
     >
       {alert.text}
     </Alert>
