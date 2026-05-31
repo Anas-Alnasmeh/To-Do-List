@@ -1,9 +1,3 @@
-// add alert to any procress (add, edit, delete) to make sure the user know what is going on
-// popup problem
-// Add number up to categories such as: (5 => all, 3 => completed, 2 => uncompleted)
-
-//
-
 import { useState, useRef } from "react";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { v4 as uuidv4 } from "uuid";
@@ -48,6 +42,29 @@ export default function Main() {
 
   const bookmarkAddedIconStatus = tasks.every((e) => e.isCompleted);
 
+  let showcategorieTasks = tasks;
+
+  for (let i = 0; i < categories.length; i++) {
+    const { text, classActive } = categories[i];
+    if (text === "مُكتمل" && classActive === "active") {
+      showcategorieTasks = tasks.filter((e) => e.isCompleted);
+      break;
+    }
+    if (text === "غير مُكتمل" && classActive === "active") {
+      showcategorieTasks = tasks.filter((e) => !e.isCompleted);
+      break;
+    }
+  }
+
+  const commonProps = {
+    handleEditReset,
+    tasks,
+    setTasks,
+    userInputAdd,
+    setUserInputAdd,
+    showAlert,
+  };
+
   const timeoutRefOne = useRef(null);
   const timeoutRefTwo = useRef(null);
   const timeoutRefThree = useRef(null);
@@ -91,86 +108,42 @@ export default function Main() {
               );
             })}
           </div>
-          {categories[0].classActive === "active" ? (
-            <>
-              <ul>
-                <Task
-                  arr={tasks}
-                  handleClickComplete={handleClickComplete}
-                  handleClickDelete={handleClickDelete}
-                  handleClickEdit={handleClickEdit}
-                />
-              </ul>
-              <label htmlFor="new-task">مهمة جديدة</label>
-              <div className="add-task">
-                <input
-                  id="new-task"
-                  value={userInputAdd.text}
-                  onChange={handleUserInput}
-                  placeholder="أكتب مهمة..."
-                />
-                <button
-                  disabled={
-                    userInputAdd.text === "" || userInputAdd.alreadyExist
-                  }
-                  onClick={handleClickAdd}
-                >
-                  إضافة مهمة
-                </button>
-              </div>
-              <div
-                className="already-exist"
-                style={{
-                  opacity: userInputAdd.alreadyExist ? "1" : "0",
-                }}
-              >
-                هذه المهمة موجودة مسبقا!
-              </div>
-            </>
-          ) : categories[1].classActive === "active" ? (
-            <ul>
-              <Task
-                arr={tasks.filter((e) => e.isCompleted)}
-                handleClickComplete={handleClickComplete}
-                handleClickDelete={handleClickDelete}
-                handleClickEdit={handleClickEdit}
-              />
-            </ul>
-          ) : (
-            <ul>
-              <Task
-                arr={tasks.filter((e) => !e.isCompleted)}
-                handleClickComplete={handleClickComplete}
-                handleClickDelete={handleClickDelete}
-                handleClickEdit={handleClickEdit}
-              />
-            </ul>
-          )}
+          <ul>
+            <Task
+              arr={showcategorieTasks}
+              handleClickComplete={handleClickComplete}
+              handleClickDelete={handleClickDelete}
+              handleClickEdit={handleClickEdit}
+            />
+          </ul>
+          <label htmlFor="new-task">مهمة جديدة</label>
+          <div className="add-task">
+            <input
+              id="new-task"
+              value={userInputAdd.text}
+              onChange={handleUserInput}
+              placeholder="أكتب مهمة..."
+            />
+            <button
+              disabled={userInputAdd.text === "" || userInputAdd.alreadyExist}
+              onClick={handleClickAdd}
+            >
+              إضافة مهمة
+            </button>
+          </div>
+          <div
+            className="already-exist"
+            style={{
+              opacity: userInputAdd.alreadyExist ? "1" : "0",
+            }}
+          >
+            هذه المهمة موجودة مسبقا!
+          </div>
         </div>
       </div>
-      {editTask.status ? (
-        <Edit
-          handleEditReset={handleEditReset}
-          tasks={tasks}
-          setTasks={setTasks}
-          text={editTask.text}
-          userInputAdd={userInputAdd}
-          setUserInputAdd={setUserInputAdd}
-          showAlert={showAlert}
-        />
-      ) : deleteTask.status ? (
-        <Delete
-          handleEditReset={handleEditReset}
-          tasks={tasks}
-          setTasks={setTasks}
-          id={deleteTask.id}
-          userInputAdd={userInputAdd}
-          setUserInputAdd={setUserInputAdd}
-          showAlert={showAlert}
-        />
-      ) : (
-        <></>
-      )}
+
+      {editTask.status && <Edit {...commonProps} text={editTask.text} />}
+      {deleteTask.status && <Delete {...commonProps} id={deleteTask.id} />}
     </>
   );
 
@@ -206,15 +179,9 @@ export default function Main() {
   }
 
   function showAlert(sentText, state) {
-    if (timeoutRefOne.current) {
-      clearTimeout(timeoutRefOne.current);
-    }
-    if (timeoutRefTwo.current) {
-      clearTimeout(timeoutRefTwo.current);
-    }
-    if (timeoutRefThree.current) {
-      clearTimeout(timeoutRefThree.current);
-    }
+    if (timeoutRefOne.current) clearTimeout(timeoutRefOne.current);
+    if (timeoutRefTwo.current) clearTimeout(timeoutRefTwo.current);
+    if (timeoutRefThree.current) clearTimeout(timeoutRefThree.current);
     setAlert({
       status: true,
       hide: true,
