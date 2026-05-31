@@ -27,7 +27,7 @@ export default function AlertMessage({ alert }) {
       }
       variant="filled"
       severity={alert.severity}
-      className="alert"
+      className={`alert ${alert.hide ? "hide" : ""}`}
     >
       {alert.text}
     </Alert>

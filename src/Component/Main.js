@@ -4,7 +4,7 @@
 
 //
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import { v4 as uuidv4 } from "uuid";
 import Task from "./Task";
@@ -39,9 +39,16 @@ export default function Main() {
 
   const [deleteTask, setDeleteTask] = useState({ status: false, id: "" });
 
-  const [alert, setAlert] = useState({ status: false, text: "", severity: "" });
+  const [alert, setAlert] = useState({
+    status: false,
+    hide: false,
+    text: "",
+    severity: "",
+  });
 
   const bookmarkAddedIconStatus = tasks.every((e) => e.isCompleted);
+
+  const timeoutRef = useRef(null);
 
   return (
     <>
@@ -197,18 +204,21 @@ export default function Main() {
   }
 
   function showAlert(sentText, state) {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     setAlert({
       status: true,
+      hide: false,
       text: sentText,
       severity: state,
     });
-    setTimeout(
-      () =>
-        setAlert(() => {
-          return { status: false, text: "", severity: "" };
-        }),
-      6000,
-    );
+    timeoutRef.current = setTimeout(() => {
+      setAlert((prev) => ({ ...prev, hide: true }));
+      setTimeout(() => {
+        setAlert({ status: false, hide: false, text: "", severity: "" });
+      }, 300);
+    }, 6000);
   }
 
   function handleClickComplete(id) {
