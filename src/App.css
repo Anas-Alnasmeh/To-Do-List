@@ -327,7 +327,7 @@
 /* Alert and author */
 
 .alert {
-  width: clamp(200px, 50vw, 400px);
+  width: clamp(220px, 50vw, 400px);
   position: fixed;
   bottom: 25px;
   right: 25px;
@@ -368,7 +368,7 @@
 
 @media (max-width: 520px) {
   .tasks-box {
-    width: 100vw;
+    width: 90vw;
     padding-left: 12px;
     padding-right: 12px;
   }
