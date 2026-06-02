@@ -200,7 +200,7 @@ export default function Main() {
             severity: "",
           });
         }, 300);
-      }, 6000);
+      }, 4000);
     }, 300);
   }
 
