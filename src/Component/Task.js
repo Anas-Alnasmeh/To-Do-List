@@ -4,11 +4,13 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 export default function Task({
   arr,
-  handleClickComplete,
   handleClickDelete,
   handleClickEdit,
+  tasks,
+  setTasks,
+  showAlert,
 }) {
-  return arr.map((e) => (
+  const arrList = arr.map((e) => (
     <li
       title={e.isCompleted ? "مُنجز" : "غير مُنجز"}
       key={e.id}
@@ -31,23 +33,42 @@ export default function Task({
           <CheckIcon />
         </div>
         <div
+          title="تعديل المهمة"
           onClick={() => handleClickEdit(e.text)}
           className="icon"
           style={{ border: "2px solid #1010d7ed" }}
-          title="تعديل المهمة"
         >
           <EditIcon style={{ color: "#1010d7ed" }} />
         </div>
 
         <div
+          title="حذف المهمة"
           onClick={() => handleClickDelete(e.id)}
           className="icon"
           style={{ border: "2px solid #bc0000e3" }}
-          title="حذف المهمة"
         >
           <DeleteForeverIcon style={{ color: "#bc0000e3" }} />
         </div>
       </div>
     </li>
   ));
+
+  return <ul>{arrList}</ul>;
+
+  function handleClickComplete(id) {
+    let show;
+    const newArr = tasks.map((task) => {
+      if (task.id === id) {
+        show = task.isCompleted;
+        return { ...task, isCompleted: !task.isCompleted };
+      }
+      return task;
+    });
+    setTasks(newArr);
+    localStorage.setItem("tasks", JSON.stringify(newArr));
+    showAlert(
+      show ? "تم إلغاء إنجاز المهمة!" : "تم تحديد المهمة كمُنجز",
+      "info",
+    );
+  }
 }

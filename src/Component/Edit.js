@@ -18,7 +18,7 @@ export default function Edit({
     <>
       <div className="back-container" onClick={handleEditReset}></div>
       <div className="edit-box container">
-        <button className="exit" onClick={handleEditReset}>
+        <button type="button" className="exit" onClick={handleEditReset}>
           ×
         </button>
         <h2>
@@ -36,39 +36,42 @@ export default function Edit({
               const inputText = e.target.value;
               setUserInputEdit({
                 text: inputText,
-                alreadyExist: !tasks.every(({ text }) => text !== inputText),
+                alreadyExist: tasks.some(
+                  ({ text }) => text === inputText.trim(),
+                ),
               });
             }}
           />
           <button
+            type="button"
             disabled={
-              userInputEdit.text === "" ||
+              userInputEdit.text.trim() === "" ||
               userInputEdit.text === text ||
               userInputEdit.alreadyExist
             }
             onClick={() => {
-              if (userInputEdit.text !== "") {
-                const newArr = tasks.map((e) => {
-                  return e.text === text
-                    ? { ...e, text: userInputEdit.text }
-                    : e;
-                });
-                setTasks(newArr);
-                localStorage.setItem("tasks", JSON.stringify(newArr));
-                setUserInputAdd({
-                  ...userInputAdd,
-                  alreadyExist: !newArr.every(
-                    ({ text }) => text !== userInputAdd.text,
-                  ),
-                });
-                handleEditReset();
-                showAlert("تم تعديل المهمة بنجاح", "info");
-              }
+              const newArr = tasks.map((e) => {
+                return e.text === text
+                  ? { ...e, text: userInputEdit.text.trim() }
+                  : e;
+              });
+              setTasks(newArr);
+              localStorage.setItem("tasks", JSON.stringify(newArr));
+              setUserInputAdd({
+                ...userInputAdd,
+                alreadyExist: newArr.some(
+                  ({ text }) => text === userInputAdd.text.trim(),
+                ),
+              });
+              handleEditReset();
+              showAlert("تم تعديل المهمة بنجاح", "info");
             }}
           >
             تعديل
           </button>
-          <button onClick={handleEditReset}>رجوع</button>
+          <button type="button" onClick={handleEditReset}>
+            رجوع
+          </button>
           <div
             className="already-exist-edit"
             style={{

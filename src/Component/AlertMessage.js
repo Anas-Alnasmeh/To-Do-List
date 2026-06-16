@@ -11,7 +11,7 @@ export default function AlertMessage({ alert }) {
         opacity: alert.hide && alert.status ? "1" : "0",
         transform:
           alert.hide && alert.status ? "translateY(0)" : "translateY(25px)",
-        transition: "all 300ms ease-in-out",
+        transition: "opacity 300ms ease-in-out, transform 300ms ease-in-out",
       }}
       icon={
         alert.severity === "error" ? (
