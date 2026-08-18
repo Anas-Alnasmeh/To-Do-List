@@ -25,7 +25,7 @@ export default function Task({
           onClick={() => handleClickComplete(e.id)}
           className="icon"
           style={{
-            border: "2px solid #00b900",
+            border: "1px solid #00b900",
             color: e.isCompleted ? "var(--primary)" : "#00b900",
             backgroundColor: e.isCompleted ? "#00b900" : "var(--primary)",
           }}
@@ -36,7 +36,7 @@ export default function Task({
           title="تعديل المهمة"
           onClick={() => handleClickEdit(e.text)}
           className="icon"
-          style={{ border: "2px solid #1010d7ed" }}
+          style={{ border: "1px solid #1010d7ed" }}
         >
           <EditIcon style={{ color: "#1010d7ed" }} />
         </div>
@@ -45,7 +45,7 @@ export default function Task({
           title="حذف المهمة"
           onClick={() => handleClickDelete(e.id)}
           className="icon"
-          style={{ border: "2px solid #bc0000e3" }}
+          style={{ border: "1px solid #bc0000e3" }}
         >
           <DeleteForeverIcon style={{ color: "#bc0000e3" }} />
         </div>
